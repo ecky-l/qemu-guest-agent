@@ -1,6 +1,6 @@
 # Docker image for qemu-guest-agent
 
-This docker image provides the qemu-guest-agent based on alpine.
+This docker image provides the qemu-guest-agent based on centos.
 
 # How to build
 
