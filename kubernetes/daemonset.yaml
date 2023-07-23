@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -7,7 +6,7 @@ metadata:
   labels:
     app: qemu-guest-agent
 spec:
-  revisionHistoryLimit: 5
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: qemu-guest-agent
@@ -20,23 +19,23 @@ spec:
       nodeSelector:
         kubernetes.io/arch: amd64
       containers:
-        - name: qemu-guest-agent
-          env:
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.nodeName
-          image: qemu-guest-agent-image
-          imagePullPolicy: IfNotPresent
-          resources: {}
-          securityContext:
-            privileged: true
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /dev/virtio-ports/org.qemu.guest_agent.0
-              name: host-qemu-guest-agent
+      - name: qemu-guest-agent
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: qemu-guest-agent-image
+        imagePullPolicy: IfNotPresent
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /dev/virtio-ports/org.qemu.guest_agent.0
+          name: host-qemu-guest-agent
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -44,37 +43,37 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                    - key: kubernetes.io/arch
-                      operator: In
-                      values:
-                        - arm64
-                topologyKey: kubernetes.io/hostname
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                  - arm64
+              topologyKey: kubernetes.io/hostname
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
       priorityClassName: system-node-critical
       tolerations:
       - operator: Exists
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: host-qemu-guest-agent
-          hostPath:
-            path: /dev/virtio-ports/org.qemu.guest_agent.0
-            type: ""
+      - name: host-qemu-guest-agent
+        hostPath:
+          path: /dev/virtio-ports/org.qemu.guest_agent.0
+          type: ""
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:

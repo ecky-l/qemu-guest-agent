@@ -1,12 +1,11 @@
----
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kube-system
 
 resources:
-  - daemonset.yaml
+- daemonset.yaml
 
 images:
-  - name: qemu-guest-agent-image
-    newName: ghcr.io/danmanners/qemu-guest-agent
-    newTag: fedora-36
+- name: qemu-guest-agent-image
+  newName: ghcr.io/danmanners/qemu-guest-agent
+  newTag: fedora-39
