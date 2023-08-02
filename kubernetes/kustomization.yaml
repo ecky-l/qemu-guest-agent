@@ -8,4 +8,4 @@ resources:
 images:
 - name: qemu-guest-agent-image
   newName: ghcr.io/danmanners/qemu-guest-agent
-  newTag: fedora-39
+  newTag: "fedora-39"
