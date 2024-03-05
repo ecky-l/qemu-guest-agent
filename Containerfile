@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora:39
+FROM quay.io/fedora/fedora:41
 
 RUN yum -y --setopt=tsflags=nodocs install qemu-guest-agent && \
     mkdir -p /etc/qemu /var/log/qemu-ga
